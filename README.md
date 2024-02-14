@@ -6,7 +6,7 @@ This repository contains code and synthetic anonymised data for the Fourth Joint
 
 ## Introduction
 
-The JIACRA IV report aims to provide insights into antimicrobial consumption and resistance patterns in bacteria from humans and food-producing animals. This README.md file serves as a guide for users to understand and replicate the analyses performed in the report.
+The JIACRA IV report aims to provide insights into antimicrobial consumption and resistance patterns in bacteria from humans and food-producing animals. This `README.md` file serves as a guide for users to understand and replicate the analyses performed in the report.
 
 ## Repository Structure
 
@@ -37,7 +37,7 @@ The anonymised synthetic datasets for demonstration of the code and their corres
 
 ## Documentation
 
-For detailed instructions and documentation for each analysis type, refer to the `README.md` files in the corresponding subfolder.
+For detailed instructions and documentation for each analysis type, please refer to the `README.md` files in their corresponding subfolder.
 
 ## Authors
 
