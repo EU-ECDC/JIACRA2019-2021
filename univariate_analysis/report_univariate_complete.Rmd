@@ -1,0 +1,444 @@
+---
+title: "JIACRA IV"
+date: "`r format(Sys.time(), '%d %B %Y')`"
+output:
+  word_document: default
+  html_document:
+    df_print: paged
+---
+
+```{r setup, echo=FALSE, message = FALSE, warning = FALSE, results='hide'}
+knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(comment = NA)
+```
+
+```{r settings, echo = FALSE, message = FALSE, warning = FALSE, results='hide'}
+# This R markdown file contains all the univariate analyses performed for the elaboration of the JIACRA IV report. Please use the knit option to generate a structured word document containing a summary of all analyses.
+
+# Cleaning the desk (removing all objects)
+rm(list=ls())
+
+# Set working directory
+setwd('X:/Your/Path/Directory"')
+
+## Config ------------------------------------------------------------------
+source("config.R")
+
+## Import data ------------------------------------------------------------
+AMCh_AMRh <- read.csv("data/AMCh_AMRh.csv")
+AMCa_AMRh <- read.csv("data/AMCa_AMRh.csv")
+AMRa_AMRh <- read.csv("data/AMRa_AMRh.csv")
+AMCa_AMRa <- read.csv("data/AMCa_AMRa.csv")
+
+## Analysis function ------------------------------------------------------------
+source("scripts/univariate_analysis.R")
+
+```
+
+$~$
+
+## Chapter 5. Results for carbapenems
+
+### 5.2 Consumption in humans and resistance in bacteria from humans
+
+```{r 5.2, results="asis", fig.width=10, fig.height=7, warning = FALSE}
+## E.Coli
+analysis_fun(dat=AMCh_AMRh,dataset_type = "AMCh_AMRh", model="log",class="CAR",pathogen="ESCCOL",ymax=0.25,years=c(2019,2020,2021)) 
+## Klepne
+analysis_fun(AMCh_AMRh,"AMCh_AMRh",model="log",class="CAR",pathogen="KLEPNE",ymax=1,years=c(2019,2020,2021)) 
+```
+
+$~$
+
+## Chapter 6. Results for 3rd and 4th generation cephalosporins
+
+### 6.2 Consumption in humans and resistance in bacteria from humans
+
+```{r 6.2, results="asis", fig.width=10, fig.height=7, warning = FALSE}
+## E.Coli
+analysis_fun(AMCh_AMRh, "AMCh_AMRh", model="log",class="CEPH",pathogen="ESCCOL",ymax=0.5, years=c(2019,2020,2021)) 
+```
+### 6.3.  Consumption in food-producing animals and resistance in bacteria from food-producing animals
+
+```{r 6.3, results="asis", fig.width=10, fig.height=7, warning = FALSE}
+## E.Coli
+analysis_fun(AMCa_AMRa, "AMCa_AMRa",class="CEPH",pathogen="ESCCOL", animal="animals",ymax=0.25, years=c(2019,2020,2021)) 
+analysis_fun(dat=AMCa_AMRa,dataset_type = "AMCa_AMRa",class="CEPH",pathogen="ESCCOL", animal="pigs", ymax=0.25,years=c(2019,2021)) 
+
+## ESBL-AmpC
+analysis_fun(dat=AMCa_AMRa,dataset_type="AMCa_AMRa",class="CEPH",pathogen="ESCCOL", animal="ESBL", ymax=1, years=c(2019,2020,2021)) 
+```
+
+
+### 6.4 Resistance in bacterial isolates from humans and food-producing animals
+
+```{r 6.4, results="asis", fig.width=10, fig.height=7, warning = FALSE}
+## E.Coli
+analysis_fun(AMRa_AMRh,"AMRa_AMRh", class="CEPH",pathogen="ESCCOL", animal="pigs",ymax=0.5, years=c(2019,2021)) 
+analysis_fun(AMRa_AMRh,"AMRa_AMRh", model = "log", class="CEPH",pathogen="ESCCOL", animal="calves",ymax=0.5, years=c(2019,2021)) 
+analysis_fun(AMRa_AMRh,"AMRa_AMRh", class="CEPH",pathogen="ESCCOL", animal="turkeys",ymax=0.5, years=2020) 
+analysis_fun(AMRa_AMRh,"AMRa_AMRh", class="CEPH",pathogen="ESCCOL", animal="broilers",ymax=0.5, years=2020) 
+```
+
+### 6.5 Consumption in food-producing animals and resistance in bacteria from humans
+
+```{r 6.5, results="asis", fig.width=10, fig.height=7, warning = FALSE}
+## E.Coli
+analysis_fun(AMCa_AMRh, "AMCa_AMRh",class="CEPH",pathogen="ESCCOL",ymax=0.5, years=c(2019,2020,2021)) 
+```
+$~$
+
+## Chapter 7. Results for fluoroquinolones 
+
+### 7.2 Consumption in humans and resistance in bacteria from humans
+
+```{r 7.2, results="asis", fig.width=10, fig.height=7, warning = FALSE}
+## E.Coli
+analysis_fun(AMCh_AMRh, "AMCh_AMRh",model="log",class="QALL",pathogen="ESCCOL",ymax=1, years=c(2019,2020,2021)) 
+## CAMJEJ
+analysis_fun(AMCh_AMRh, "AMCh_AMRh",class="QALL",pathogen="CAMJEJ",ymax=1.1, years=c(2019,2020,2021)) 
+## CAMCOL
+analysis_fun(AMCh_AMRh, "AMCh_AMRh",class="QALL",pathogen="CAMCOL",ymax=1.1, years=c(2019,2020,2021))
+```
+### 7.3.  Consumption in food-producing animals and resistance in bacteria from food-producing animals
+
+```{r 7.3, results="asis", fig.width=10, fig.height=7, warning = FALSE}
+## E.Coli
+analysis_fun(AMCa_AMRa, "AMCa_AMRa",class="QALL",pathogen="ESCCOL", animal="animals",ymax=1, years=c(2019,2020,2021)) 
+
+analysis_fun(dat=AMCa_AMRa,dataset_type = "AMCa_AMRa",class="QALL",pathogen="ESCCOL", animal="poultry", ymax=1,years=2020) 
+
+analysis_fun(dat=AMCa_AMRa,dataset_type = "AMCa_AMRa",class="QALL",pathogen="ESCCOL", animal="pigs", ymax=1,years=c(2019,2021)) 
+# CAMJEJ
+analysis_fun(dat=AMCa_AMRa,dataset_type = "AMCa_AMRa",class="QALL",pathogen="CAMJEJ", animal="poultry", ymax=1,years=2020) 
+# CAMCOL
+analysis_fun(dat=AMCa_AMRa,dataset_type = "AMCa_AMRa",class="QALL",pathogen="CAMCOL", animal="pigs", ymax=1,years=2021) 
+```
+
+### 7.4 Resistance in bacterial isolates from humans and food-producing animals
+
+```{r 7.4, results="asis", fig.width=10, fig.height=7, warning = FALSE}
+## E.Coli
+analysis_fun(AMRa_AMRh, "AMRa_AMRh",class="QALL",pathogen="ESCCOL", animal="pigs",ymax=1, years=c(2019,2021)) 
+analysis_fun(AMRa_AMRh, "AMRa_AMRh", model="log",class="QALL",pathogen="ESCCOL", animal="calves",ymax=1, years=c(2019,2021)) 
+analysis_fun(AMRa_AMRh, "AMRa_AMRh",class="QALL",pathogen="ESCCOL", animal="turkeys",ymax=0.5,  years=2020) 
+analysis_fun(AMRa_AMRh, "AMRa_AMRh",class="QALL",pathogen="ESCCOL", animal="broilers",ymax=0.5, years=2020) 
+
+## CAMJEJ
+analysis_fun(AMRa_AMRh, "AMRa_AMRh", class="QALL",pathogen="CAMJEJ", animal="turkeys",ymax=1, years=2020, model='log') 
+analysis_fun(AMRa_AMRh, "AMRa_AMRh", model = "log", class="QALL",pathogen="CAMJEJ", animal="broilers",ymax=1, years=2020) 
+
+## CAMCOL
+analysis_fun(AMRa_AMRh, "AMRa_AMRh", class="QALL",pathogen="CAMCOL", animal="pigs", ymax=1.1, years=2021) 
+
+```
+
+### 7.5 Consumption in food-producing animals and resistance in bacteria from humans
+```{r 7.5, results="asis", fig.width=10, fig.height=7, warning = FALSE}
+## E.Coli
+analysis_fun(AMCa_AMRh, "AMCa_AMRh",class="QALL",pathogen="ESCCOL",ymax=1, years=c(2019,2020,2021)) 
+
+## CAMJEJ
+analysis_fun(AMCa_AMRh, "AMCa_AMRh",class="QALL",pathogen="CAMJEJ",ymax=1.1, years=c(2019,2020,2021))
+## CAMCOL
+analysis_fun(AMCa_AMRh, "AMCa_AMRh",model="log",class="QALL",pathogen="CAMCOL",ymax=1.1, years=c(2019,2020,2021))
+```
+$~$
+
+## Chapter 8. Results for polymixins 
+
+### 8.3.  Consumption in food-producing animals and resistance in bacteria from food-producing animals
+
+```{r 8.3, results="asis", fig.width=10, fig.height=7, warning = FALSE}
+## E.Coli
+analysis_fun(AMCa_AMRa, "AMCa_AMRa",class="POL",pathogen="ESCCOL", animal="animals",ymax=0.25, years=c(2019,2020,2021)) 
+
+analysis_fun(dat=AMCa_AMRa,dataset_type = "AMCa_AMRa",class="POL",pathogen="ESCCOL", animal="poultry", ymax=0.25,years=2020) 
+
+analysis_fun(dat=AMCa_AMRa,dataset_type = "AMCa_AMRa",model="log",class="POL",pathogen="ESCCOL", animal="pigs", ymax=0.25,years=c(2019,2021)) 
+```
+
+## Chapter 9. Results for aminopenicillins
+
+### 9.2 Consumption in humans and resistance in bacteria from humans
+
+```{r 9.2, results="asis", fig.width=10, fig.height=7, warning = FALSE}
+# # E.Coli
+ analysis_fun(AMCh_AMRh, "AMCh_AMRh",class="AMP",pathogen="ESCCOL",ymax=1, years=c(2019,2020,2021))
+```
+
+### 9.3.  Consumption in food-producing animals and resistance in bacteria from food-producing animals
+
+```{r 9.3, results="asis", fig.width=10, fig.height=7, warning = FALSE}
+## E.Coli
+analysis_fun(AMCa_AMRa, "AMCa_AMRa",class="AMP",pathogen="ESCCOL", animal="animals",ymax=1, years=c(2019,2020,2021)) 
+
+analysis_fun(dat=AMCa_AMRa,dataset_type = "AMCa_AMRa",class="AMP",pathogen="ESCCOL", animal="poultry", ymax=1,years=2020) 
+
+analysis_fun(dat=AMCa_AMRa,dataset_type = "AMCa_AMRa",class="AMP",pathogen="ESCCOL", animal="pigs", ymax=1,years=c(2019,2021)) 
+```
+
+### 9.4 Resistance in bacterial isolates from humans and food-producing animals
+
+```{r 9.4, results="asis", fig.width=10, fig.height=7, warning = FALSE}
+## E.Coli
+analysis_fun(AMRa_AMRh, "AMRa_AMRh",class="AMP",pathogen="ESCCOL", animal="pigs",ymax=1, years=c(2019,2021)) 
+analysis_fun(AMRa_AMRh, "AMRa_AMRh",class="AMP",pathogen="ESCCOL", animal="calves",ymax=1, years=c(2019,2021)) 
+analysis_fun(AMRa_AMRh, "AMRa_AMRh",class="AMP",pathogen="ESCCOL", animal="turkeys",ymax=1, years=2020) 
+analysis_fun(AMRa_AMRh, "AMRa_AMRh",class="AMP",pathogen="ESCCOL", animal="broilers",ymax=1, years=2020) 
+```
+
+### 9.5 Consumption in food-producing animals and resistance in bacteria from humans
+```{r 9.5, results="asis", fig.width=10, fig.height=7, warning = FALSE}
+## E.Coli
+analysis_fun(AMCa_AMRh, "AMCa_AMRh",class="AMP",pathogen="ESCCOL",ymax=1, years=c(2019,2020,2021)) 
+```
+$~$
+
+## Chapter 10. Results for macrolides
+
+### 10.2 Consumption in humans and resistance in bacteria from humans
+
+```{r 10.2, results="asis", fig.width=10, fig.height=7, warning = FALSE}
+## CAMJEJ
+analysis_fun(AMCh_AMRh, "AMCh_AMRh",class="MAC",pathogen="CAMJEJ",ymax=0.25, years=c(2019,2020,2021)) 
+## CAMCOL
+analysis_fun(AMCh_AMRh, "AMCh_AMRh",class="MAC",pathogen="CAMCOL",ymax=1, years=c(2019,2020,2021)) 
+```
+
+### 10.3.  Consumption in food-producing animals and resistance in bacteria from food-producing animals
+
+```{r 10.3, results="asis", fig.width=10, fig.height=7, warning = FALSE}
+# CAMJEJ
+analysis_fun(dat=AMCa_AMRa,dataset_type = "AMCa_AMRa",class="MAC",pathogen="CAMJEJ", animal="poultry", ymax=0.25,years=2020) 
+
+# CAMCOL
+analysis_fun(dat=AMCa_AMRa,dataset_type = "AMCa_AMRa",class="MAC",pathogen="CAMCOL", animal="pigs", ymax=1,years=2021) 
+```
+
+
+### 10.4 Resistance in bacterial isolates from humans and food-producing animals
+```{r 10.4, results="asis", fig.width=10, fig.height=7, warning = FALSE}
+## CAMJEJ
+analysis_fun(AMRa_AMRh, "AMRa_AMRh", model = "log", class="MAC",pathogen="CAMJEJ", animal="turkeys", ymax=0.25,years=2020) 
+analysis_fun(AMRa_AMRh, "AMRa_AMRh", model = "log", class="MAC",pathogen="CAMJEJ", animal="broilers", ymax=0.25,years=2020) 
+
+## CAMCOL
+analysis_fun(AMRa_AMRh, "AMRa_AMRh", model="log", class="MAC",pathogen="CAMCOL", animal="pigs", ymax=1,years=2021)
+```
+
+### 10.5 Consumption in food-producing animals and resistance in bacteria from humans
+```{r 10.5, results="asis", fig.width=10, fig.height=7, warning = FALSE}
+## CAMJEJ
+analysis_fun(AMCa_AMRh, "AMCa_AMRh",class="MAC",pathogen="CAMJEJ",ymax=0.25, years=c(2019,2020,2021))
+## CAMCOL
+analysis_fun(AMCa_AMRh, "AMCa_AMRh",class="MAC",pathogen="CAMCOL",ymax=1, years=c(2019,2020,2021))
+```
+
+$~$
+
+## Chapter 11. Results for tetracyclines
+
+### 11.2 Consumption in humans and resistance in bacteria from humans
+
+```{r 11.2, results="asis", fig.width=10, fig.height=7, warning = FALSE}
+## CAMJEJ
+analysis_fun(AMCh_AMRh, "AMCh_AMRh",class="TET",pathogen="CAMJEJ",ymax=1, years=c(2019,2020,2021)) 
+## CAMCOL
+analysis_fun(AMCh_AMRh, "AMCh_AMRh",class="TET",pathogen="CAMCOL",ymax=1.1, years=c(2019,2020,2021)) 
+```
+
+### 11.3.  Consumption in food-producing animals and resistance in bacteria from food-producing animals
+
+```{r 11.3, results="asis", fig.width=10, fig.height=7, warning = FALSE}
+## E.Coli
+analysis_fun(AMCa_AMRa, "AMCa_AMRa",class="TET",pathogen="ESCCOL", animal="animals",ymax=1, years=c(2019,2020,2021)) 
+
+analysis_fun(dat=AMCa_AMRa,dataset_type = "AMCa_AMRa",class="TET",pathogen="ESCCOL", animal="poultry", ymax=1,years=2020) 
+
+analysis_fun(dat=AMCa_AMRa,dataset_type = "AMCa_AMRa",class="TET",pathogen="ESCCOL", animal="pigs", ymax=1,years=c(2019,2021)) 
+# CAMJEJ
+analysis_fun(dat=AMCa_AMRa,dataset_type = "AMCa_AMRa",class="TET",pathogen="CAMJEJ", animal="poultry", ymax=1,years=2020) 
+# CAMCOL
+analysis_fun(dat=AMCa_AMRa,dataset_type = "AMCa_AMRa",class="TET",pathogen="CAMCOL", animal="pigs", ymax=1.1,years=2021) 
+```
+
+### 11.4 Resistance in bacterial isolates from humans and food-producing animals
+```{r 11.4, results="asis", fig.width=10, fig.height=7, warning = FALSE}
+## CAMJEJ
+analysis_fun(AMRa_AMRh, "AMRa_AMRh",class="TET",pathogen="CAMJEJ", animal="turkeys", ymax=1,years=2020) 
+analysis_fun(AMRa_AMRh, "AMRa_AMRh",class="TET",pathogen="CAMJEJ", animal="broilers", ymax=1.1,years=2020) 
+
+## CAMCOL
+analysis_fun(AMRa_AMRh, "AMRa_AMRh",class="TET", pathogen="CAMCOL", animal="pigs", ymax=1.1, years=2021)
+```
+
+### 11.5 Consumption in food-producing animals and resistance in bacteria from humans
+
+```{r 11.5, results="asis", fig.width=10, fig.height=7, warning = FALSE}
+## CAMJEJ
+analysis_fun(AMCa_AMRh, "AMCa_AMRh",class="TET",pathogen="CAMJEJ",ymax=1, years=c(2019,2020,2021))
+## CAMCOL
+analysis_fun(AMCa_AMRh, "AMCa_AMRh",class="TET",pathogen="CAMCOL",ymax=1.1, years=c(2019,2020,2021))
+```
+
+$~$
+
+## Chapter 13. Antimicrobial consumption and proportion of complete susceptibility in Escherichia coli 
+
+### 13.1 Consumption in animals and resistance in food-producing animals
+```{r FullyS_1, results="asis", fig.width=10, fig.height=7, warning = FALSE}
+## E.Coli
+analysis_fun(dat = AMCa_AMRa, dataset_type = "AMCa_AMRa", model='log',class="CS", pathogen="ESCCOL", animal='animals',ymax=1, years=c(2019,2020,2021)) 
+```
+
+### 13.2 Consumption in humans and resistance in bacteria from humans
+```{r FullyS_2, results="asis", fig.width=10, fig.height=7, warning = FALSE}
+## E.Coli
+analysis_fun(dat = AMCh_AMRh, dataset_type = "AMCh_AMRh", class="CS", pathogen="ESCCOL", ymax=1, years=c(2019,2020,2021)) 
+```
+
+# 18. Annex – Salmonella spp. analyses 
+## 18.2 Third- and fourth-generation cephalosporins 
+### 18.2.1 Consumption in humans and resistance in Salmonella spp. isolates from humans
+```{r 18.2.1, results="asis", fig.width=10, fig.height=7, warning = FALSE}
+## SalmSPP
+analysis_fun(AMCh_AMRh, "AMCh_AMRh", class="CEPH",pathogen="SLMSPP",ymax=0.25, years=c(2019,2020,2021)) 
+```
+### 18.2.2 Consumption in food-producing animals and resistance in Salmonella spp. isolates from food-producing animals 
+```{r 18.2.2, results="asis", fig.width=10, fig.height=7, warning = FALSE}
+## SalmSPP
+analysis_fun(AMCa_AMRa, "AMCa_AMRa", class="CEPH",pathogen="SLMSPP",ymax=0.25, animal='animals',  years=c(2019,2020,2021)) 
+## SalmSpp in pigs
+analysis_fun(AMCa_AMRa, "AMCa_AMRa", class="CEPH",pathogen="SLMSPP",ymax=0.25, animal='pig carcasses', years=c(2019,2021)) 
+```
+
+### 18.2.3 	Resistance in Salmonella isolates from humans and food-producing animals
+```{r 18.2.3, results="asis", fig.width=10, fig.height=7, warning = FALSE}
+## SalmSPP SIMR
+analysis_fun(AMRa_AMRh, "AMRa_AMRh", class="CEPH",pathogen="SLMSPP",ymax=0.25, model = 'log', animal='SIMR',  years=c(2019,2020,2021)) 
+
+## SalmSPP
+analysis_fun(AMRa_AMRh, "AMRa_AMRh", model="log", class="CEPH",pathogen="SLMSPP", animal="pig carcasses", ymax=0.25, years=c(2019,2021)) 
+analysis_fun(AMRa_AMRh, "AMRa_AMRh", model="log", class="CEPH",pathogen="SLMSPP", animal="turkeys", ymax=0.25,years=2020) 
+analysis_fun(AMRa_AMRh,"AMRa_AMRh", model="log", class="CEPH",pathogen="SLMSPP", animal="broilers", ymax=0.25,years=2020) 
+
+```
+### 18.2.4	Consumption in food-producing animals and resistance of Salmonella spp. from humans
+
+```{r 18.2.4, results="asis", fig.width=10, fig.height=7, warning = FALSE}
+## SalmSPP
+analysis_fun(AMCa_AMRh, "AMCa_AMRh", model="log", class="CEPH",pathogen="SLMSPP",ymax=0.25, years=c(2019,2020,2021)) 
+```
+## 18.3 Fluoroquinolones and other quinolones
+### 18.3.1 Consumption in humans and resistance in Salmonella spp. isolates from humans
+```{r 18.3.1, results="asis", fig.width=10, fig.height=7, warning = FALSE}
+## SalmSPP
+analysis_fun(AMCh_AMRh, "AMCh_AMRh", class="QALL",pathogen="SLMSPP",ymax=1, years=c(2019,2020,2021)) 
+```
+### 18.3.2 Consumption in food-producing animals and resistance in Salmonella spp. isolates from food-producing animals 
+```{r 18.3.2, results="asis", fig.width=10, fig.height=7, warning = FALSE}
+## SalmSPP
+analysis_fun(AMCa_AMRa, "AMCa_AMRa", class="QALL",pathogen="SLMSPP",ymax=1, animal='animals',  years=c(2019,2020,2021)) 
+analysis_fun(AMCa_AMRa, "AMCa_AMRa", class="QALL",pathogen="SLMSPP",ymax=1, animal='pig carcasses', years=c(2019,2021)) 
+analysis_fun(AMCa_AMRa, "AMCa_AMRa", class="QALL",pathogen="SLMSPP",ymax=1,model = 'log', animal='poultry', years=2020)
+```
+
+### 18.3.3 	Resistance in Salmonella isolates from humans and food-producing animals
+```{r 18.3.3, results="asis", fig.width=10, fig.height=7, warning = FALSE}
+# SIMR
+analysis_fun(dat=AMRa_AMRh,dataset_type="AMRa_AMRh",class="QALL",pathogen="SLMSPP", animal="SIMR", ymax=1, years=c(2019,2020,2021)) 
+
+## SalmSPP
+analysis_fun(AMRa_AMRh, "AMRa_AMRh",class="QALL",pathogen="SLMSPP", animal="pig carcasses", ymax=1, years=c(2019,2021)) 
+analysis_fun(AMRa_AMRh, "AMRa_AMRh",class="QALL",pathogen="SLMSPP", animal="turkeys", model='linear', ymax=0.25,years=2020) 
+analysis_fun(AMRa_AMRh, "AMRa_AMRh",class="QALL",pathogen="SLMSPP", animal="broilers", ymax=0.5,years=2020) 
+```
+### 18.3.4	Consumption in food-producing animals and resistance of Salmonella spp. from humans
+
+```{r 18.3.4, results="asis", fig.width=10, fig.height=7, warning = FALSE}
+## SalmSPP
+analysis_fun(AMCa_AMRh, "AMCa_AMRh",class="QALL",pathogen="SLMSPP",ymax=1, years=c(2019,2020,2021)) 
+```
+# 18.4	Polymyxins
+## 18.4.1	Consumption and resistance of Salmonella spp., in food-producing animals
+```{r 18.4.1, results="asis", fig.width=10, fig.height=7, warning = FALSE}
+## SalmSPP
+analysis_fun(AMCa_AMRa, "AMCa_AMRa",class="POL",pathogen="SLMSPP", animal='animals',ymax=1, years=c(2019,2020,2021)) 
+
+analysis_fun(AMCa_AMRa, "AMCa_AMRa",class="POL",pathogen="SLMSPP", animal='pig carcasses',ymax=1.1, years=c(2019,2021)) 
+analysis_fun(AMCa_AMRa, "AMCa_AMRa",class="POL",pathogen="SLMSPP", animal='poultry',ymax=1, years=2020, model='quadratic')
+```
+# 18.5 Aminopenicillins
+
+## 18.5.1	Consumption in humans and resistance in Salmonella spp. isolates from humans
+
+```{r 18.5.1, results="asis", fig.width=10, fig.height=7, warning = FALSE}
+# SalmSPP
+analysis_fun(AMCh_AMRh, "AMCh_AMRh",class="AMP",pathogen="SLMSPP",ymax=1, years=c(2019,2020,2021))
+```
+
+### 18.5.2  Consumption in food-producing animals and resistance in bacteria from food-producing animals
+
+```{r 18.5.2, results="asis", fig.width=10, fig.height=7, warning = FALSE}
+## E.Coli
+analysis_fun(AMCa_AMRa, "AMCa_AMRa",class="AMP",pathogen="SLMSPP", animal="animals",ymax=1, years=c(2019,2020,2021)) 
+
+analysis_fun(dat=AMCa_AMRa,dataset_type = "AMCa_AMRa",class="AMP",pathogen="SLMSPP", animal="poultry", model='linear', ymax=1,years=2020) 
+
+analysis_fun(dat=AMCa_AMRa,dataset_type = "AMCa_AMRa",class="AMP",pathogen="SLMSPP", animal="pig carcasses", model='quadratic', ymax=1,years=c(2019,2021))
+```
+
+### 18.5.3 Resistance in bacterial isolates from humans and food-producing animals
+
+```{r 18.5.3, results="asis", fig.width=10, fig.height=7, warning = FALSE}
+# SIMR
+analysis_fun(dat=AMRa_AMRh,dataset_type="AMRa_AMRh",class="AMP",pathogen="SLMSPP", animal="SIMR", ymax=1, years=c(2019,2020,2021)) 
+## SalmSPP
+analysis_fun(AMRa_AMRh, "AMRa_AMRh",class="AMP",pathogen="SLMSPP", animal="pig carcasses", ymax=1, years=c(2019,2021)) 
+analysis_fun(AMRa_AMRh, "AMRa_AMRh",class="AMP",pathogen="SLMSPP", animal="turkeys", ymax=1, years=2020) 
+analysis_fun(AMRa_AMRh, "AMRa_AMRh",class="AMP",pathogen="SLMSPP", animal="broilers", ymax=1, years=2020) 
+```
+
+### 18.5.4 Consumption in food-producing animals and resistance in bacteria from humans
+```{r 18.5.4, results="asis", fig.width=10, fig.height=7, warning = FALSE}
+## SalmSPP
+analysis_fun(AMCa_AMRh, "AMCa_AMRh",class="AMP",pathogen="SLMSPP",ymax=1, years=c(2019,2020,2021)) 
+```
+$~$
+
+## 18.6 Tetracyclines
+
+### 18.6.1 Consumption in humans and resistance in bacteria from humans
+
+```{r 18.6.1, results="asis", fig.width=10, fig.height=7, warning = FALSE}
+## SalmSPP
+analysis_fun(AMCh_AMRh, "AMCh_AMRh",class="TET",pathogen="SLMSPP",ymax=1, years=c(2019,2020,2021)) 
+```
+
+### 18.6.2  Consumption in food-producing animals and resistance in bacteria from food-producing animals
+
+```{r 18.6.2, results="asis", fig.width=10, fig.height=7, warning = FALSE}
+# SalmSPP
+analysis_fun(AMCa_AMRa, "AMCa_AMRa",class="TET",pathogen="SLMSPP", animal="animals",ymax=1, years=c(2019,2020,2021)) 
+analysis_fun(AMCa_AMRa, "AMCa_AMRa", class="TET",pathogen="SLMSPP",ymax=1, animal='pig carcasses',  years=c(2019,2021), model = 'quadratic')
+analysis_fun(AMCa_AMRa, "AMCa_AMRa", class="TET",pathogen="SLMSPP",ymax=1, animal='poultry',  years=2020)
+```
+
+
+### 18.6.3 Resistance in bacterial isolates from humans and food-producing animals
+```{r 18.6.3, results="asis", fig.width=10, fig.height=7, warning = FALSE}
+# SIMR
+analysis_fun(dat=AMRa_AMRh, dataset_type="AMRa_AMRh",class="TET",pathogen="SLMSPP", animal="SIMR", ymax=1, years=c(2019,2020,2021)) 
+## SalmSPP
+analysis_fun(AMRa_AMRh, "AMRa_AMRh",model = "log",class="TET",pathogen="SLMSPP", animal="pig carcasses", ymax=1, years=c(2019,2021))
+analysis_fun(AMRa_AMRh, "AMRa_AMRh",model = "log",class="TET",pathogen="SLMSPP", animal="turkeys", ymax=1,years=2020) 
+analysis_fun(AMRa_AMRh, "AMRa_AMRh",class="TET",pathogen="SLMSPP", animal="broilers", ymax=1,years=2020)
+
+```
+
+### 18.6.4 Consumption in food-producing animals and resistance in bacteria from humans
+```{r 18.6.4, results="asis", fig.width=10, fig.height=7, warning = FALSE}
+## SalmSPP
+analysis_fun(AMCa_AMRh, "AMCa_AMRh",class="TET",pathogen="SLMSPP",ymax=1, years=c(2019,2020,2021)) 
+```
